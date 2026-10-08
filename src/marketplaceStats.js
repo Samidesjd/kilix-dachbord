@@ -1,0 +1,9 @@
+export function marketplaceStats({orders=[],products=[],stores=[],users=[]}) {
+ const countBy=(items,key)=>items.reduce((a,x)=>{const k=x[key]||"غير محدد";a[k]=(a[k]||0)+1;return a},{});
+ const gross=orders.reduce((a,x)=>a+Number(x.total_price||0),0);
+ const cancelled=orders.filter(x=>/cancel|ملغ|رفض/i.test(x.status||"")).length;
+ const byStore={};orders.forEach(x=>{const k=x.store_id||"unknown";byStore[k]??={id:k,name:stores.find(s=>s.id===k)?.store_name||"متجر غير معروف",orders:0,value:0};byStore[k].orders++;byStore[k].value+=Number(x.total_price||0)});
+ const byProduct={};orders.forEach(x=>{const k=x.product_id||x.product_title||"unknown";byProduct[k]??={id:k,name:x.product_title||products.find(p=>p.id===k)?.title||"منتج",orders:0,quantity:0};byProduct[k].orders++;byProduct[k].quantity+=Number(x.quantity||0)});
+ const days=Array.from({length:7},(_,i)=>{const d=new Date(Date.now()-(6-i)*86400000),start=new Date(d.getFullYear(),d.getMonth(),d.getDate()),end=new Date(+start+86400000);return {name:start.toLocaleDateString("ar-DZ",{weekday:"short",day:"numeric"}),orders:orders.filter(x=>x.created_at&&new Date(x.created_at)>=start&&new Date(x.created_at)<end).length}});
+ return {gross,averageOrder:orders.length?gross/orders.length:0,cancelled,cancelRate:orders.length?cancelled/orders.length*100:0,statusCounts:countBy(orders,"status"),topStores:Object.values(byStore).sort((a,b)=>b.orders-a.orders).slice(0,5),topProducts:Object.values(byProduct).sort((a,b)=>b.orders-a.orders).slice(0,5),daily:days,activeProducts:products.filter(x=>x.is_active===true).length,inactiveProducts:products.filter(x=>x.is_active===false).length,verifiedStores:stores.filter(x=>x.verified===true).length,unverifiedStores:stores.filter(x=>x.verified===false).length,activeUsers:users.filter(x=>x.is_active===true).length,usersWithStore:users.filter(x=>x.has_store===true).length,topWilayas:Object.entries(countBy(orders,"wilaya")).sort((a,b)=>b[1]-a[1]).slice(0,5)};
+}
