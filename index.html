@@ -1,1 +1,34 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><meta name="theme-color" content="#FF6B00"/><title>Kilix — لوحة الموظفين</title><script type="module" src="/src/dashboard.jsx"></script></head><body><div id="root"></div></body></html>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FF6B00" />
+  <title>Kilix — لوحة الموظفين</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#f7f8fa;color:#20242b;margin:0}
+    #boot-status{max-width:680px;margin:12vh auto;padding:28px;background:#fff;border:1px solid #e5e7eb;border-radius:16px;line-height:1.8}
+    #boot-status h1{font-size:22px;margin:0 0 8px}#boot-status p{color:#5b6472}
+  </style>
+  <script>
+    window.addEventListener('error',function(e){
+      var root=document.getElementById('root');
+      if(root && !root.dataset.appReady){
+        root.innerHTML='<section id="boot-status"><h1>تعذر تشغيل لوحة Kilix</h1><p>حدث خطأ أثناء تحميل التطبيق. حدّث الصفحة، وإذا استمر الخطأ أرسل لقطة شاشة لهذه الرسالة.</p><p style="direction:ltr;text-align:left;overflow-wrap:anywhere"></p></section>';
+        var detail=root.querySelector('p:last-child'); if(detail) detail.textContent=(e.message||'Script loading error')+' '+(e.filename||'');
+      }
+    });
+    window.addEventListener('unhandledrejection',function(e){
+      var root=document.getElementById('root');
+      if(root && !root.dataset.appReady){
+        root.innerHTML='<section id="boot-status"><h1>تعذر تشغيل لوحة Kilix</h1><p>حدث خطأ غير معالج أثناء بدء التطبيق.</p><p style="direction:ltr;text-align:left;overflow-wrap:anywhere"></p></section>';
+        var detail=root.querySelector('p:last-child'); if(detail) detail.textContent=String(e.reason||'Unknown error');
+      }
+    });
+  </script>
+</head>
+<body>
+  <div id="root"><section id="boot-status"><h1>جارٍ تشغيل لوحة Kilix…</h1><p>إذا استمرت هذه الرسالة، فهناك مشكلة في تحميل ملفات التطبيق.</p></section></div>
+  <script type="module" src="/src/dashboard.jsx"></script>
+</body>
+</html>
