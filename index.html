@@ -17,7 +17,7 @@
         root.innerHTML='<section id="boot-status"><h1>تعذر تشغيل لوحة Kilix</h1><p>حدث خطأ أثناء تحميل التطبيق. حدّث الصفحة، وإذا استمر الخطأ أرسل لقطة شاشة لهذه الرسالة.</p><p style="direction:ltr;text-align:left;overflow-wrap:anywhere"></p></section>';
         var detail=root.querySelector('p:last-child'); if(detail) detail.textContent=(e.message||'Script loading error')+' '+(e.filename||'');
       }
-    });
+    }, true);
     window.addEventListener('unhandledrejection',function(e){
       var root=document.getElementById('root');
       if(root && !root.dataset.appReady){
@@ -29,6 +29,6 @@
 </head>
 <body>
   <div id="root"><section id="boot-status"><h1>جارٍ تشغيل لوحة Kilix…</h1><p>إذا استمرت هذه الرسالة، فهناك مشكلة في تحميل ملفات التطبيق.</p></section></div>
-  <script type="module" src="/src/dashboard.jsx"></script>
+  <script type="module" src="./src/dashboard.jsx"></script>
 </body>
 </html>
